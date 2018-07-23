@@ -1,5 +1,5 @@
 import sys
-
+import json
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as num
@@ -113,9 +113,22 @@ def pagerank(G, alpha, filename):
     f.write(str(r))
     f.close()
 
+#HITS
+def hits(g):
+    k, v =  nx.hits_numpy(g, True)
+    minimo = min(k.items(), key=lambda x: x[1])
+    massimo = max(k.items(), key=lambda x: x[1])
+    media = sum(k.values())/len(k)
+    print(minimo, massimo, media)
+    minimo_a = min(v.items(), key=lambda x: x[1])
+    massimo_a = max(v.items(), key=lambda x: x[1])
+    media_a = sum(v.values())/len(v)
+    print(minimo_a, massimo_a, media_a)
+
+
 def main():
     #Open Google dataset
-    data_dataset = opendataset("/Users/mariaelena/Desktop/web-Google.txt")
+    data_dataset = opendataset("/Users/mariaelena/Desktop/p2p-Gnutella05.txt")
     nodes = splitdatanodes(data_dataset)
     edges = splitdataedges(data_dataset)
     G = creategraph(nodes, edges)
@@ -141,7 +154,8 @@ def main():
     # avgdegrees(G, '/Users/mariaelena/Desktop/analisi_grafo/grado/grado_tot.txt')
     # avgdegrees(G, '/Users/mariaelena/Desktop/analisi_grafo/grado/grado_in.txt')
     # avgdegrees(G, '/Users/mariaelena/Desktop/analisi_grafo/grado/grado_out.txt')
-    #print(nx.hits(G, max_iter=100, tol=1e-08, nstart=None, normalized=True))
+    #nx.hits(G, 100, 1e-08, None, True))
+    print(hits(G))
 
 if __name__ == "__main__":
     main()
