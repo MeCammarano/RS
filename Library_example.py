@@ -3,6 +3,9 @@ import json
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as num
+import powerlaw as powerlaw
+import pylab as p
+import scipy
 
 
 #Load dataset
@@ -125,13 +128,21 @@ def hits(g):
     media_a = sum(v.values())/len(v)
     print(minimo_a, massimo_a, media_a)
 
+#Power Law
+def power_law_method(g):
+    degree = [t[1] for t in g.in_degree]
+    fit = powerlaw.Fit(degree, xmin=min(degree), xmax=max(degree))
+    print(fit.power_law.alpha)
+    print(fit.power_law.sigma)
+    print(fit.distribution_compare('power_law', 'exponential'))
+
 #TSS
 def tss(g, soglia):
         target_set = set()
         #dizionario le cui chiavi sono i nodi e i valori le soglie relative a ciascun nodo
-        insieme_soglia = dict()
         g1 = g
-        insieme_soglia = {node: soglia for node in g1.nodes}
+        soglie = dict()
+        insieme_soglia = {node: soglie for node in g1.nodes}
 
         while len(g1.nodes) != 0:
           #Primo caso
@@ -194,7 +205,9 @@ def main():
     # avgdegrees(G, '/Users/mariaelena/Desktop/analisi_grafo/grado/grado_out.txt')
     #nx.hits(G, 100, 1e-08, None, True))
     #hits(G)
-    print(tss(G, 2))
+    #print(tss(G, 2))
+    power_law_method(G)
+
 
 if __name__ == "__main__":
     main()
