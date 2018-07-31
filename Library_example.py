@@ -125,6 +125,44 @@ def hits(g):
     media_a = sum(v.values())/len(v)
     print(minimo_a, massimo_a, media_a)
 
+#TSS
+def tss(g, soglia):
+        target_set = set()
+        #dizionario le cui chiavi sono i nodi e i valori le soglie relative a ciascun nodo
+        insieme_soglia = dict()
+        g1 = g
+        insieme_soglia = {node: soglia for node in g1.nodes}
+
+        while len(g1.nodes) != 0:
+          #Primo caso
+          #insieme dei nodi la cui soglia è pari a 0
+          soglia_vuota = list(filter(lambda n1: insieme_soglia == 0, g1.nodes))
+          if(len(soglia_vuota) > 0):
+              #scorro i nodi interessati
+              for nodo in soglia_vuota:
+                  #scorro i vicini dei nodi interessati
+                  for vicino in g1.neighbors(nodo):
+                      #diminuisco di 1 la soglia dei vicini (vedere paper, versione greedy)
+                      insieme_soglia[vicino] = max(insieme_soglia[vicino] - 1, 0)
+              g1.remove_nodes_from(soglia_vuota)
+          else:
+              #controllo se la soglia del nodo è maggiore rispetto al suo grado (vedere paper, versione greedy)
+              high_soglia = max(g1.nodes, key=lambda n: insieme_soglia[n]-g1.degree[n])
+              if insieme_soglia[high_soglia] > g1.degree[high_soglia]:
+                  #aggiungo alla soluzione
+                  target_set.add(high_soglia)
+                  #scorro i vicini
+                  for vicino in g1.neighbors(high_soglia):
+                      #diminuisco di 1
+                      insieme_soglia[vicino] = insieme_soglia[vicino] - 1
+                  #rimuovo dal grafo
+                  g1.remove_node(high_soglia)
+              else:
+                  v = max(g1.nodes, key=lambda n: insieme_soglia[n]/(g1.degree[n] * (g1.degree[n] + 1)))
+                  g1.remove_node(v)
+
+        return target_set
+
 
 def main():
     #Open Google dataset
@@ -155,7 +193,8 @@ def main():
     # avgdegrees(G, '/Users/mariaelena/Desktop/analisi_grafo/grado/grado_in.txt')
     # avgdegrees(G, '/Users/mariaelena/Desktop/analisi_grafo/grado/grado_out.txt')
     #nx.hits(G, 100, 1e-08, None, True))
-    print(hits(G))
+    #hits(G)
+    print(tss(G, 2))
 
 if __name__ == "__main__":
     main()
