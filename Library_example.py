@@ -2,6 +2,7 @@ import sys
 import json
 from math import log
 import matplotlib.pyplot as plt
+from networkx.algorithms import community
 import pandas as pd
 import networkx as nx
 import numpy as num
@@ -216,13 +217,16 @@ def tss(g, soglia):
 
         return target_set
 
-
 def main():
     #Open Google dataset
     data_dataset = opendataset("/Users/mariaelena/Desktop/p2p-Gnutella05.txt")
     nodes = splitdatanodes(data_dataset)
     edges = splitdataedges(data_dataset)
     G = creategraph(nodes, edges)
+    #print(nx.is_strongly_connected(G))
+    #print(nx.is_weakly_connected(G))
+    #print(nx.is_attracting_component(G))
+    #print(nx.is_semiconnected(G))
     #print(G.is_directed())
     #numnodes = numbernodes(G)
     #numedges = numberedges(G)
