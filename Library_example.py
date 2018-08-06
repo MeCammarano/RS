@@ -1,6 +1,8 @@
 import sys
 import json
+from math import log
 import matplotlib.pyplot as plt
+import pandas as pd
 import networkx as nx
 import numpy as num
 import powerlaw as powerlaw
@@ -130,11 +132,44 @@ def hits(g):
 
 #Power Law
 def power_law_method(g):
+    #si prendono solo i gradi di ciascun nodo
     degree = [t[1] for t in g.in_degree]
+    #trasforma la lista con series
+    degree_cont = pd.Series(degree).value_counts()
+    #calcola la frequenza di ogni termine
+    d1 = {d: degree_cont[d] / sum(degree_cont) for d in degree_cont.index}
+    #si prendono le chiavi
+    x = d1.keys()
+    #si prendono i valori
+    y = d1.values()
     fit = powerlaw.Fit(degree, xmin=min(degree), xmax=max(degree))
+    plt.rc('text', usetex=True)
+    fig = plt.figure()
     print(fit.power_law.alpha)
     print(fit.power_law.sigma)
     print(fit.distribution_compare('power_law', 'exponential'))
+    #powerlaw.plot_pdf(degree_count, linear_bins=True, color='r')
+    list_x = list(x)
+    #print(list_x)
+    list_y = list(y)
+    #print(list_y)
+    #si effettua il logaritmo sia delle chiavi che dei valori per poterli plottare
+    list_log_x = num.log10(list_x)
+    list_log_y = num.log10(list_y)
+    #si plottano i risultati
+    plt.plot(list_log_x, list_log_y, 'r+')
+    #si calcola l'alpha
+    alpha = fit.power_law.alpha
+    power_x_value = num.linspace(min(degree_cont.index), max(degree_cont.index), 100)
+    #x elevato alla alpha
+    power_y_value = list(map(lambda x: x**(-alpha), power_x_value))
+    power_x_value = num.log10(power_x_value)
+    power_y_value = num.log10(power_y_value)
+    plt.plot(power_x_value, power_y_value, 'b-')
+    plt.savefig("/Users/mariaelena/Desktop/img/prima.png".format('ciao'), dpi=fig.dpi)
+    plt.show()
+
+
 
 #TSS
 def tss(g, soglia):
