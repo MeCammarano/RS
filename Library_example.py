@@ -117,6 +117,11 @@ def pagerank(G, alpha, filename):
     f = open(filename, 'w')
     f.write(str(r))
     f.close()
+    minimo = min(r.items(), key = lambda x: x[0])
+    massimo = max(r.items(), key = lambda x: x[0])
+    numbers = [x for x in r.values()]
+    media = sum(numbers)/len(numbers)
+    print(minimo, massimo, media)
 
 #HITS
 def hits(g):
@@ -230,7 +235,7 @@ def main():
     #min_out = mindegree(G, '/Users/mariaelena/Desktop/analisi_grafo/grado/grado_out.txt')
     #min_tot = mindegree(G, '/Users/mariaelena/Desktop/analisi_grafo/grado/grado_tot.txt')
     #print(min_in, min_out, min_tot)
-    #pagerank(G, 0.85, '/Users/mariaelena/Desktop/analisi_grafo/pagerank/pagerank.txt')
+    pagerank(G, 0.85, '/Users/mariaelena/Desktop/analisi_grafo/pagerank/pagerank.txt')
     #avg_degree_in = avgdegrees(G, '/Users/mariaelena/Desktop/analisi_grafo/grado/grado_in.txt')
     #avg_degree_out = avgdegrees(G, '/Users/mariaelena/Desktop/analisi_grafo/grado/grado_out.txt')
     #avg_degree_tot = avgdegrees(G, '/Users/mariaelena/Desktop/analisi_grafo/grado/grado_tot.txt')
