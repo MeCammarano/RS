@@ -177,7 +177,7 @@ def tss(g, soglia):
         #dizionario le cui chiavi sono i nodi e i valori le soglie relative a ciascun nodo
         g1 = g
         soglie = dict()
-        insieme_soglia = {node: soglie for node in g1.nodes}
+        insieme_soglia = {node: soglia for node in g1.nodes}
 
         while len(g1.nodes) != 0:
           #Primo caso
@@ -241,7 +241,7 @@ def main():
     #nx.hits(G, 100, 1e-08, None, True))
     #hits(G)
     #print(tss(G, 2))
-    power_law_method(G)
+    #power_law_method(G)
 
 
 if __name__ == "__main__":
